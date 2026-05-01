@@ -249,7 +249,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
           if (_bgImage != null)
             // Dark veil to keep foreground controls prominent.
-            Container(color: Colors.black.withOpacity(0.42)),
+            Container(color: Colors.black.withValues(alpha: 0.42)),
 
           // Foreground UI
           SafeArea(
@@ -391,7 +391,7 @@ class _SavedSpacePill extends StatelessWidget {
           height: 44,
           padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.14),
+            color: Colors.white.withValues(alpha: 0.14),
             borderRadius: BorderRadius.circular(999),
             border: Border.all(color: Colors.white24, width: 1),
           ),
@@ -481,8 +481,8 @@ class _ActionButtonState extends State<_ActionButton> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: widget.onTap == null
-                      ? Colors.white.withOpacity(0.06)
-                      : Colors.white.withOpacity(0.14),
+                      ? Colors.white.withValues(alpha: 0.06)
+                      : Colors.white.withValues(alpha: 0.14),
                 ),
                 child: Icon(
                   widget.icon,
@@ -538,7 +538,7 @@ class _TopIconButtonState extends State<_TopIconButton> {
               duration: const Duration(milliseconds: 110),
               curve: Curves.easeOutCubic,
               color: _pressed
-                  ? Colors.white.withOpacity(0.16)
+                  ? Colors.white.withValues(alpha: 0.16)
                   : Colors.transparent,
               child: Icon(widget.icon, color: Colors.white70, size: 20),
             ),

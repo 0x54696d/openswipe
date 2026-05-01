@@ -22,7 +22,7 @@ class CardStack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _CardStackInner(
+    return CardStackInner(
       key: stackKey,
       current: current,
       next: next,
@@ -31,7 +31,7 @@ class CardStack extends StatelessWidget {
   }
 }
 
-class CardStackState extends State<_CardStackInner> {
+class CardStackState extends State<CardStackInner> {
   final GlobalKey<SwipeCardState> _cardKey = GlobalKey();
   double _incomingStartScale = 0.93;
 
@@ -54,7 +54,7 @@ class CardStackState extends State<_CardStackInner> {
   }
 
   @override
-  void didUpdateWidget(covariant _CardStackInner oldWidget) {
+  void didUpdateWidget(covariant CardStackInner oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.current.id != widget.current.id) {
       final oldForegroundSize = _cardSize(oldWidget.current, context);
@@ -132,12 +132,12 @@ class CardStackState extends State<_CardStackInner> {
   }
 }
 
-class _CardStackInner extends StatefulWidget {
+class CardStackInner extends StatefulWidget {
   final AssetEntity current;
   final AssetEntity? next;
   final void Function(bool isKeep) onSwiped;
 
-  const _CardStackInner({
+  const CardStackInner({
     required this.current,
     required this.next,
     required this.onSwiped,

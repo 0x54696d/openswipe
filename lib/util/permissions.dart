@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 enum PermissionStatus {
@@ -116,7 +117,7 @@ class _DeniedScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.photo_library_outlined, size: 64),
+              const Icon(LucideIcons.image, size: 64),
               const SizedBox(height: 24),
               Text(
                 'Photo access required',
@@ -153,7 +154,7 @@ class _PermanentlyDeniedScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.lock_outline, size: 64),
+              const Icon(LucideIcons.lock, size: 64),
               const SizedBox(height: 24),
               Text(
                 'Permission blocked',
@@ -189,7 +190,7 @@ class _RestrictedScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.block_outlined, size: 64),
+              const Icon(LucideIcons.ban, size: 64),
               const SizedBox(height: 24),
               Text(
                 'Access restricted',

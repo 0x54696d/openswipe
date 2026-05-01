@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -295,7 +294,7 @@ class SwipeCardState extends State<SwipeCard> {
                     borderRadius: BorderRadius.circular(outerRadius),
                     border: Border.all(
                       color: progress > fadeStart
-                          ? stampColor.withOpacity(accentOpacity)
+                          ? stampColor.withValues(alpha: accentOpacity)
                           : Colors.transparent,
                       width: borderWidth,
                     ),
@@ -366,9 +365,8 @@ class SwipeCardState extends State<SwipeCard> {
             ? const Duration(milliseconds: 320)
             : Duration.zero,
         curve: Curves.easeOutBack,
-        transform: Matrix4.identity()
-          ..translate(_dragOffset.dx, _dragOffset.dy)
-          ..rotateZ(_dragOffset.dx / 800),
+        transform: (Matrix4.translationValues(_dragOffset.dx, _dragOffset.dy, 0)
+          ..rotateZ(_dragOffset.dx / 800)),
         transformAlignment: Alignment.center,
         child: Column(
           mainAxisSize: MainAxisSize.min,
