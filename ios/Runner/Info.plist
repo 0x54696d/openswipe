@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>OpenSwipe needs access to your photo library to help you clean it up.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>OpenSwipe needs permission to modify your photo library.</string>
 </dict>
 </plist>
