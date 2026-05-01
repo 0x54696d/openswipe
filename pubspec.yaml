@@ -37,6 +37,7 @@ dependencies:
   photo_manager: ^3.9.0
   permission_handler: ^12.0.1
   lucide_icons_flutter: ^3.1.13
+  animated_digit: ^3.3.2
 
 dev_dependencies:
   flutter_test:
