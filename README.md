@@ -23,3 +23,7 @@ Contributions are welcome. If you find a bug or have a feature request, please o
 - Follow standard Flutter/Dart style conventions (`flutter analyze` should pass with no issues)
 - Keep third-party dependencies minimal — prefer Flutter/Dart built-ins where possible
 - Do not introduce any networking, analytics, or tracking of any kind
+
+## License
+
+OpenSwipe is released under the Unlicense. See [LICENSE](LICENSE) for details.
