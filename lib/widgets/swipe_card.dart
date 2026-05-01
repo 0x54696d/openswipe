@@ -53,13 +53,16 @@ class SwipeCard extends StatefulWidget {
   SwipeCardState createState() => SwipeCardState();
 }
 
-class SwipeCardState extends State<SwipeCard> {
+class SwipeCardState extends State<SwipeCard>
+    with SingleTickerProviderStateMixin {
   Offset _dragOffset = Offset.zero;
   bool _isFlying = false;
   bool _isDragging = false;
   bool _animateSnapBack = false;
+  late final AnimationController _shimmerController;
   bool _didHitCommitThreshold = false;
   MemoryImage? _image;
+  bool _imageVisible = false;
   int _imageLoadToken = 0;
   String? _assetSizeLabel;
 
@@ -73,7 +76,12 @@ class SwipeCardState extends State<SwipeCard> {
   @override
   void initState() {
     super.initState();
+    _shimmerController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat();
     _image = _CardImageCache.get(widget.asset.id);
+    _imageVisible = _image != null; // cached images show instantly
     _assetSizeLabel = _AssetSizeCache.get(widget.asset.id);
     if (_image == null) _loadImage();
     if (_assetSizeLabel == null) _loadAssetSize();
@@ -88,6 +96,7 @@ class SwipeCardState extends State<SwipeCard> {
       _isDragging = false;
       _animateSnapBack = false;
       _didHitCommitThreshold = false;
+      _imageVisible = _CardImageCache.get(widget.asset.id) != null;
       _assetSizeLabel = _AssetSizeCache.get(widget.asset.id);
       final cached = _CardImageCache.get(widget.asset.id);
       if (cached != null) {
@@ -102,6 +111,12 @@ class SwipeCardState extends State<SwipeCard> {
     }
   }
 
+  @override
+  void dispose() {
+    _shimmerController.dispose();
+    super.dispose();
+  }
+
   Future<void> _loadImage() async {
     final loadToken = ++_imageLoadToken;
     final data = await widget.asset.thumbnailDataWithSize(
@@ -112,6 +127,10 @@ class SwipeCardState extends State<SwipeCard> {
     final image = MemoryImage(data);
     _CardImageCache.put(widget.asset.id, image);
     setState(() => _image = image);
+    // Trigger fade-in on next frame so AnimatedOpacity starts from 0.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setState(() => _imageVisible = true);
+    });
   }
 
   Future<void> _loadAssetSize() async {
@@ -277,13 +296,50 @@ class SwipeCardState extends State<SwipeCard> {
         borderRadius: BorderRadius.circular(outerRadius),
         child: Stack(
           children: [
-            // Dark base
-            Positioned.fill(child: Container(color: Colors.black)),
+            // Dark base / shimmer
+            Positioned.fill(
+              child: _image == null
+                  ? AnimatedBuilder(
+                      animation: _shimmerController,
+                      builder: (context, _) {
+                        return ShaderMask(
+                          shaderCallback: (bounds) {
+                            final shimmerPos = _shimmerController.value * 3 - 1;
+                            return LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: const [
+                                Color(0xFF1A1A1A),
+                                Color(0xFF2E2E2E),
+                                Color(0xFF3A3A3A),
+                                Color(0xFF2E2E2E),
+                                Color(0xFF1A1A1A),
+                              ],
+                              stops: [
+                                (shimmerPos - 0.3).clamp(0.0, 1.0),
+                                (shimmerPos - 0.1).clamp(0.0, 1.0),
+                                shimmerPos.clamp(0.0, 1.0),
+                                (shimmerPos + 0.1).clamp(0.0, 1.0),
+                                (shimmerPos + 0.3).clamp(0.0, 1.0),
+                              ],
+                            ).createShader(bounds);
+                          },
+                          child: Container(color: Colors.white),
+                        );
+                      },
+                    )
+                  : Container(color: Colors.black),
+            ),
 
-            // Sharp image
+            // Sharp image with fade-in
             if (_image != null)
               Positioned.fill(
-                child: Image(image: _image!, fit: BoxFit.cover),
+                child: AnimatedOpacity(
+                  opacity: _imageVisible ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeIn,
+                  child: Image(image: _image!, fit: BoxFit.cover),
+                ),
               ),
 
             // Border overlay rendered on top of the image.
